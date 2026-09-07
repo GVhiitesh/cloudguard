@@ -50,19 +50,18 @@ exportRouter.get(
   '/audit.csv',
   asyncHandler(async (_req, res) => {
     const logs = await prisma.auditLog.findMany({
-      include: { user: { select: { name: true, email: true } } },
       orderBy: { createdAt: 'desc' },
       take: 5000,
     });
 
     const rows = logs.map((l) => ({
       id: l.id,
+      actorId: l.actorId,
       action: l.action,
       entity: l.entity,
       entityId: l.entityId,
-      user: l.user.name,
-      userEmail: l.user.email,
-      details: JSON.stringify(l.details),
+      before: l.before ? JSON.stringify(l.before) : '',
+      after: l.after ? JSON.stringify(l.after) : '',
       createdAt: l.createdAt,
     }));
 

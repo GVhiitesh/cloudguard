@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TourStep {

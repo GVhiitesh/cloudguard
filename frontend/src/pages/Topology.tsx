@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageShell';
 import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
 import { LoadingState, ErrorState } from '@/components/common/states';
 import { useResources } from '@/hooks/useResources';
 import type { Resource } from '@/types/api';

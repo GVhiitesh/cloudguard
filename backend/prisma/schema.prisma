@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @default(VIEWER)
+  resources Resource[]
+  alerts    Alert[]
+  createdAt DateTime   @default(now())
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model Resource {
+  id              String           @id @default(uuid())
+  name            String
+  type            ResourceType
+  provider        String           @default("AWS")
+  region          String
+  environment     Environment
+  status          ResourceStatus   @default(RUNNING)
+  lifecycle       Lifecycle        @default(ACTIVE)
+  owner           User             @relation(fields: [ownerId], references: [id])
+  ownerId         String
+  estCostPerDay   Float            @default(0)
+  healthScore     Int              @default(100)
+  metadata        Json?
+  idleSince       DateTime?
+  tags            Tag[]            @relation("ResourceTags")
+  metrics         UsageMetric[]
+  anomalies       Anomaly[]
+  recommendations Recommendation[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([environment])
+  @@index([lifecycle])
+  @@index([ownerId])
+}
+
+enum ResourceType {
+  EC2
+  RDS
+  S3
+  LAMBDA
+  EBS
+  OTHER
+}
+
+enum Environment {
+  DEV
+  STAGING
+  PROD
+}
+
+enum ResourceStatus {
+  RUNNING
+  STOPPED
+}
+
+enum Lifecycle {
+  ACTIVE
+  IDLE
+  FLAGGED
+  REVIEWED
+  ARCHIVED
+}
+
+model UsageMetric {
+  id          String   @id @default(uuid())
+  resource    Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId  String
+  timestamp   DateTime
+  cpu         Float
+  memory      Float
+  networkIn   Float
+  networkOut  Float
+  storageUsed Float
+  cost        Float
+
+  @@unique([resourceId, timestamp])
+  @@index([resourceId, timestamp])
+}
+
+model Anomaly {
+  id         String        @id @default(uuid())
+  resource   Resource      @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String
+  kind       AnomalyKind
+  severity   Severity
+  expected   Float
+  actual     Float
+  deviation  Float
+  status     AnomalyStatus @default(OPEN)
+  message    String
+  detectedAt DateTime      @default(now())
+
+  @@unique([resourceId, kind, detectedAt])
+  @@index([status])
+  @@index([resourceId, kind, status])
+}
+
+enum AnomalyKind {
+  COST_SPIKE
+  USAGE_SPIKE
+  IDLE
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AnomalyStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+model Recommendation {
+  id         String   @id @default(uuid())
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String
+  type       String
+  reason     String
+  estSaving  Float
+  applied    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([resourceId, applied])
+}
+
+model Budget {
+  id            String      @id @default(uuid())
+  scope         BudgetScope
+  scopeValue    String?
+  limitPerMonth Float
+  createdAt     DateTime    @default(now())
+
+  @@unique([scope, scopeValue])
+}
+
+enum BudgetScope {
+  GLOBAL
+  ENVIRONMENT
+  OWNER
+}
+
+model Alert {
+  id        String   @id @default(uuid())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  kind      String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  key       String
+  value     String
+  resources Resource[] @relation("ResourceTags")
+
+  @@unique([key, value])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String
+  action    String
+  entity    String
+  entityId  String
+  before    Json?
+  after     Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorId])
+}

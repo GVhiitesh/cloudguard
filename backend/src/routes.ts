@@ -1,0 +1,30 @@
+import { Router } from 'express';
+import { authRouter } from './modules/auth/auth.routes';
+import { usersRouter } from './modules/users/users.routes';
+import { resourcesRouter } from './modules/resources/resources.routes';
+import { metricsRouter } from './modules/metrics/metrics.routes';
+import { anomaliesRouter } from './modules/anomalies/anomalies.routes';
+import { idleRouter } from './modules/idle/idle.routes';
+import { recommendationsRouter } from './modules/recommendations/recommendations.routes';
+import { budgetsRouter } from './modules/budgets/budgets.routes';
+import { alertsRouter } from './modules/alerts/alerts.routes';
+import { auditRouter } from './modules/audit/audit.routes';
+import { analyticsRouter } from './modules/analytics/analytics.routes';
+import { simulatorRouter } from './modules/simulator/simulator.routes';
+import { exportRouter } from './modules/export/export.routes';
+
+export const apiRouter = Router();
+
+apiRouter.use('/auth', authRouter);
+apiRouter.use('/users', usersRouter);
+apiRouter.use('/resources', resourcesRouter);
+apiRouter.use('/metrics', metricsRouter);
+apiRouter.use('/anomalies', anomaliesRouter);
+apiRouter.use('/idle', idleRouter);
+apiRouter.use('/recommendations', recommendationsRouter);
+apiRouter.use('/budgets', budgetsRouter);
+apiRouter.use('/alerts', alertsRouter);
+apiRouter.use('/audit', auditRouter);
+apiRouter.use('/analytics', analyticsRouter);
+apiRouter.use('/simulator', simulatorRouter);
+apiRouter.use('/export', exportRouter);

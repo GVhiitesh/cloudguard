@@ -39,6 +39,6 @@ export function errorHandler(
   logger.error({ err }, 'Unhandled error');
   res.status(500).json({
     error: 'Internal server error',
-    ...(env.NODE_ENV === 'development' && err instanceof Error ? { detail: err.message } : {}),
+    ...(err instanceof Error ? { detail: err.message } : {}),
   });
 }

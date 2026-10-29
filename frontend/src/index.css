@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-canvas: #FAF9F5;
+    --color-surface: #FCFBF8;
+    --color-panel: #F7F6F2;
+    --color-panel-2: #F4F3EE;
+    --color-ink: #111315;
+    --color-ink-2: #121316;
+    --color-lime: #D7FB38;
+    --color-lime-bright: #D2F843;
+    --color-lime-soft: #ECFDF5;
+    --color-healthy: #10B981;
+    --color-healthy-deep: #059669;
+    --color-healthy-bg: #ECFDF5;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-danger: #DC2626;
+    --color-danger-bg: #FEE2E2;
+    --color-info: #2563EB;
+    --color-info-bg: #DBEAFE;
+    --color-line: #E5E3DA;
+    --color-line-2: #E8E5DB;
+    --color-muted: #6B7280;
+    --color-muted-2: #9CA3AF;
+    --color-sidebar-bg: #111315;
+    --color-sidebar-text: #FFFFFF;
+  }
+
+  .dark {
+    --color-canvas: #0B0D0F;
+    --color-surface: #141619;
+    --color-panel: #1C1F23;
+    --color-panel-2: #252830;
+    --color-ink: #F1F1F1;
+    --color-ink-2: #E8E8E8;
+    --color-lime: #D7FB38;
+    --color-lime-bright: #D2F843;
+    --color-lime-soft: #1A2E12;
+    --color-healthy: #10B981;
+    --color-healthy-deep: #34D399;
+    --color-healthy-bg: #132A1E;
+    --color-warning: #FBBF24;
+    --color-warning-bg: #2A2014;
+    --color-danger: #EF4444;
+    --color-danger-bg: #2A1414;
+    --color-info: #60A5FA;
+    --color-info-bg: #14202A;
+    --color-line: #2A2D35;
+    --color-line-2: #32363E;
+    --color-muted: #9CA3AF;
+    --color-muted-2: #6B7280;
+    --color-sidebar-bg: #080A0C;
+    --color-sidebar-text: #FFFFFF;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  .eyebrow {
+    @apply font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-muted-2;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { @apply bg-line rounded-full; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface border border-line rounded-panel shadow-card;
+  }
+  .stat-card {
+    @apply card p-5 flex flex-col gap-3;
+  }
+}

@@ -9,7 +9,13 @@ export const registerSchema = z.object({
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
   password: z.string().min(1),
+  totpCode: z.string().length(6).optional(),
+});
+
+export const mfaVerifySchema = z.object({
+  token: z.string().length(6),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type MfaVerifyInput = z.infer<typeof mfaVerifySchema>;

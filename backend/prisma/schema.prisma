@@ -9,14 +9,16 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  password  String
-  role      Role       @default(VIEWER)
-  resources Resource[]
-  alerts    Alert[]
-  createdAt DateTime   @default(now())
+  id         String     @id @default(uuid())
+  name       String
+  email      String     @unique
+  password   String
+  role       Role       @default(VIEWER)
+  mfaEnabled Boolean    @default(false)
+  mfaSecret  String?
+  resources  Resource[]
+  alerts     Alert[]
+  createdAt  DateTime   @default(now())
 }
 
 enum Role {
